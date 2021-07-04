@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class GameSelectViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
