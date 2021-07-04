@@ -21,7 +21,7 @@ class MineSweeperViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupMineCount(x: 5, y: 5)
+        setupMineCount(x: 10, y: 10)
     }
     
     
@@ -42,7 +42,7 @@ class MineSweeperViewController: UIViewController {
         var mineSize = 0
         
 //        if (mines.count >= mines[0].count) {
-        mineSize = (Int(mineFieldView.frame.height) / (mines.count)) - 5
+        mineSize = (Int(mineFieldView.frame.height) / (mines.count + 1))
         print(mineSize)
 //        } else {
 //            mineSize = (Int(mineFieldView.frame.width) - (5 * (mines[0].count + 1))) / (5 * (mines[0].count + 1))
@@ -56,16 +56,16 @@ class MineSweeperViewController: UIViewController {
                 t.isHidden = false
                 t.font = UIFont.systemFont(ofSize: 9.0)
                 t.frame = CGRect(x: 0, y: 0, width: mineSize, height: mineSize)
-                let xSpace = ((Int(mineFieldView.frame.width) - (mines.count * mineSize)) / (mines.count - 1))
+                let xSpace = ((Double(mineFieldView.frame.width) - (Double(mines.count) * Double(mineSize))) / (Double(mines.count) - 1.0))
                 print(xSpace)
-                let xLoc = ((xSpace * (x - 1)) + (mineSize * (x - 1)))
-                let yLoc = (xSpace * (y - 1)) + (mineSize * (y - 1))
+                let xLoc = (xSpace * (Double(x) - 1.0)) + (Double(mineSize) * (Double(x) - 1.0))
+                let yLoc = (xSpace * (Double(y) - 1.0)) + (Double(mineSize) * (Double(y) - 1.0))
                 
 //                print(xLoc)
 //                print(yLoc)
                 mines[y - 1][x - 1].addSubview(t)
                 mines[y - 1][x - 1].backgroundColor = UIColor.black
-                mines[y - 1][x - 1].frame = CGRect(x: xLoc, y: yLoc, width: mineSize, height: mineSize)
+                mines[y - 1][x - 1].frame = CGRect(x: xLoc, y: yLoc, width: Double(mineSize), height: Double(mineSize))
 //                mines[y][x].frame = CGRect(x: xLoc, y: Int(mineFieldView.frame.minY), width: mineSize, height: mineSize)
             }
         }
