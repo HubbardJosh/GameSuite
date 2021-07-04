@@ -13,6 +13,7 @@
 		3D6814372691500A009CAB1D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D6814352691500A009CAB1D /* Main.storyboard */; };
 		3D6814392691500F009CAB1D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D6814382691500F009CAB1D /* Assets.xcassets */; };
 		3D68143C2691500F009CAB1D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D68143A2691500F009CAB1D /* LaunchScreen.storyboard */; };
+		3D68144526915450009CAB1D /* MineSweeperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D68144426915450009CAB1D /* MineSweeperViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		3D6814382691500F009CAB1D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D68143B2691500F009CAB1D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3D68143D2691500F009CAB1D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D68144426915450009CAB1D /* MineSweeperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineSweeperViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				3D6814332691500A009CAB1D /* GameSelectViewController.swift */,
+				3D68144426915450009CAB1D /* MineSweeperViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -146,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D6814342691500A009CAB1D /* GameSelectViewController.swift in Sources */,
+				3D68144526915450009CAB1D /* MineSweeperViewController.swift in Sources */,
 				3D6814302691500A009CAB1D /* AppDelegate.swift in Sources */,
 				3D6814322691500A009CAB1D /* SceneDelegate.swift in Sources */,
 			);
