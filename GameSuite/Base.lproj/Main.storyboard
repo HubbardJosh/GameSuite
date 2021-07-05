@@ -13,17 +13,17 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="GameSuite" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sHc-1N-7ib">
-                                <rect key="frame" x="158" y="423" width="98" height="50"/>
+                                <rect key="frame" x="158" y="396" width="98" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="3Xa-RB-D2X"/>
                                 </constraints>
                                 <state key="normal" title="Mine Sweeper"/>
                                 <connections>
-                                    <action selector="asdf:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cqG-4C-r4J"/>
+                                    <segue destination="VKP-Vn-UyS" kind="showDetail" id="mZW-e2-TgG"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -46,9 +46,63 @@
                     <view key="view" contentMode="scaleToFill" id="KW1-hc-5yy">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E0e-GY-UFr">
+                                <rect key="frame" x="50" y="323" width="314" height="250"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="oQH-XF-bpA">
+                                        <rect key="frame" x="77.5" y="53" width="159" height="144"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="YOU WIN!!!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Cj-4O-mO6">
+                                                <rect key="frame" x="0.0" y="0.0" width="159" height="36"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="NUy-19-wzu">
+                                                <rect key="frame" x="20" y="51" width="119" height="93"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yTk-tL-XTk">
+                                                        <rect key="frame" x="0.0" y="0.0" width="119" height="42"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                                        <state key="normal" title="New Game"/>
+                                                        <connections>
+                                                            <action selector="newGameButtonPressed:" destination="VKP-Vn-UyS" eventType="touchUpInside" id="onY-rE-gKN"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZpO-0n-QQl">
+                                                        <rect key="frame" x="39.5" y="51" width="40" height="42"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                                        <state key="normal" title="Exit"/>
+                                                        <connections>
+                                                            <segue destination="BYZ-38-t0r" kind="showDetail" id="dbI-ay-wPz"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="oQH-XF-bpA" firstAttribute="centerY" secondItem="E0e-GY-UFr" secondAttribute="centerY" id="3Uv-0Q-Xlr"/>
+                                    <constraint firstAttribute="height" constant="250" id="dlQ-LF-8C4"/>
+                                    <constraint firstItem="oQH-XF-bpA" firstAttribute="centerX" secondItem="E0e-GY-UFr" secondAttribute="centerX" id="gQW-MD-lHU"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="QH2-TJ-1Bo"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="E0e-GY-UFr" firstAttribute="centerY" secondItem="KW1-hc-5yy" secondAttribute="centerY" id="BBb-Eh-hB5"/>
+                            <constraint firstItem="QH2-TJ-1Bo" firstAttribute="trailing" secondItem="E0e-GY-UFr" secondAttribute="trailing" constant="50" id="Rsn-Ni-bA7"/>
+                            <constraint firstItem="E0e-GY-UFr" firstAttribute="leading" secondItem="QH2-TJ-1Bo" secondAttribute="leading" constant="50" id="dRZ-xA-uDy"/>
+                            <constraint firstItem="E0e-GY-UFr" firstAttribute="centerX" secondItem="KW1-hc-5yy" secondAttribute="centerX" id="qGP-ma-6bE"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="resultLabel" destination="6Cj-4O-mO6" id="r9O-w8-97A"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BYV-ty-naL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
