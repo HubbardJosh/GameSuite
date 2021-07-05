@@ -23,7 +23,7 @@
                                 </constraints>
                                 <state key="normal" title="Mine Sweeper"/>
                                 <connections>
-                                    <segue destination="VKP-Vn-UyS" kind="showDetail" id="Vw4-1H-gBw"/>
+                                    <action selector="asdf:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cqG-4C-r4J"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -42,30 +42,13 @@
         <!--Mine Sweeper View Controller-->
         <scene sceneID="yJt-cm-t8c">
             <objects>
-                <viewController id="VKP-Vn-UyS" customClass="MineSweeperViewController" customModule="GameSuite" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="VKP-Vn-UyS" customClass="MineSweeperViewController" customModule="GameSuite" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KW1-hc-5yy">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oxE-6z-mBt">
-                                <rect key="frame" x="20" y="234" width="374" height="374"/>
-                                <color key="backgroundColor" systemColor="systemBlueColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="374" id="Nlr-Qb-eKt"/>
-                                    <constraint firstAttribute="height" constant="374" id="b7H-Yx-U3P"/>
-                                </constraints>
-                            </view>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="QH2-TJ-1Bo"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="oxE-6z-mBt" firstAttribute="centerX" secondItem="KW1-hc-5yy" secondAttribute="centerX" id="RXD-GZ-yix"/>
-                            <constraint firstItem="oxE-6z-mBt" firstAttribute="centerY" secondItem="KW1-hc-5yy" secondAttribute="centerY" id="WRA-JA-Y2C"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="mineFieldView" destination="oxE-6z-mBt" id="QqH-tP-CeQ"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BYV-ty-naL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -75,9 +58,6 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
