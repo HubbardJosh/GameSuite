@@ -14,21 +14,44 @@ class MineSweeperViewController: UIViewController {
     let v = UIView()
     
     var squares = [[UIButton]]()
+    var squareLabels = [[UILabel]]()
     var xSquareCount = 10
     var ySquareCount = 10
     
-    var mineCount = 5
+    var mineCount = 10
     var mineLocations = [[Bool]]()
     var surroundingMines = [[Int]]()
     
     var firstGuess = true
     
+    var oneSurround = UIColor(red: 123.0/255.0, green: 240.0/255.0, blue: 75.0/255.0, alpha: 1.0)
+    var twoSurround = UIColor(red: 226.0/255.0, green: 100.0/255.0, blue: 25.0/255.0, alpha: 1.0)
+    var threeSurround = UIColor(red: 221.0/255.0, green: 15.0/255.0, blue: 47.0/255.0, alpha: 1.0)
+    var fourSurround = UIColor(red: 224.0/255.0, green: 15.0/255.0, blue: 224.0/255.0, alpha: 1.0)
+    var fiveSurround = UIColor(red: 48.0/255.0, green: 15.0/255.0, blue: 229.0/255.0, alpha: 1.0)
+    var sixSurround = UIColor(red: 12.0/255.0, green: 64.0/255.0, blue: 125.0/255.0, alpha: 1.0)
+    var sevenSurround = UIColor(red: 48.0/255.0, green: 7.0/255.0, blue: 85.0/255.0, alpha: 1.0)
+    var eightSurround = UIColor(red: 49.0/255.0, green: 5.0/255.0, blue: 24.0/255.0, alpha: 1.0)
+    
+    @IBOutlet weak var flagMineSwitch: UISwitch!
+    @IBOutlet weak var questionMineSwitch: UISwitch!
     @IBOutlet weak var endgameView: UIView!
+    @IBOutlet weak var blockGameView: UIView!
     @IBOutlet weak var resultLabel: UILabel!
+    @IBOutlet weak var newGameButton: UIButton!
+    @IBOutlet weak var exitButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        endgameView.layer.cornerRadius = 3
+        v.layer.cornerRadius = 3
         
+        blockGameView.isHidden = true
+        endgameView.isHidden = true
+        newGameButton.isHidden = true
+        exitButton.isHidden = true
+        questionMineSwitch.isOn = false
+        flagMineSwitch.isOn = false
         instantiateSquares()
         setupMineFieldCount(x: xSquareCount, y: ySquareCount)
 //        setMineCount(count: 5)
@@ -48,20 +71,46 @@ class MineSweeperViewController: UIViewController {
         resetSquares()
         setupMineFieldCount(x: xSquareCount, y: ySquareCount)
 //        countSurrounding()
-        v.isHidden = false
+//        v.isHidden = false
+        questionMineSwitch.isOn = false
+        flagMineSwitch.isOn = false
+        blockGameView.isHidden = true
+        endgameView.isHidden = true
+        newGameButton.isHidden = true
+        exitButton.isHidden = true
+        endgameView.layer.zPosition = 0
+        blockGameView.layer.zPosition = 0
+        newGameButton.layer.zPosition = 0
+        exitButton.layer.zPosition = 0
+        self.view.bringSubviewToFront(v)
     }
     func setupMineFieldCount(x: Int, y: Int) {
         squares.removeAll()
+        squareLabels.removeAll()
+        mineLocations.removeAll()
+        surroundingMines.removeAll()
+        
         for yy in 0..<y {
             squares.append([])
+            squareLabels.append([])
             mineLocations.append([])
             surroundingMines.append([])
             for xx in 0..<x {
+                let t = UILabel()
+
+                t.isHidden = true
+//                t.font = UIFont.systemFont(ofSize: 9.0)
+                t.font = UIFont.systemFont(ofSize: 12.0, weight: .bold)
+                t.textAlignment = .center
+                
                 squares[yy].append(UIButton())
+                squareLabels[yy].append(t)
                 v.addSubview(squares[yy][xx])
                 
                 mineLocations[yy].append(false)
                 surroundingMines[yy].append(0)
+                
+                squares[yy][xx].addSubview(t)
             }
         }
         
@@ -78,6 +127,7 @@ class MineSweeperViewController: UIViewController {
         
         for y in 1..<squares.count + 1 {
             for x in 1..<squares[0].count + 1 {
+                squares[y - 1][x - 1].layer.cornerRadius = 1
                 squares[y - 1][x - 1].tag = (x + ((y - 1) * squares[0].count))
                 squares[y - 1][x - 1].addTarget(self, action: #selector(minePressed(_:)), for: .touchUpInside)
 
@@ -87,7 +137,7 @@ class MineSweeperViewController: UIViewController {
                 let yLoc = (ySpace * (Double(y) - 1.0)) + (Double(squareSizeY) * (Double(y) - 1.0))
                 
                 squares[y - 1][x - 1].frame = CGRect(x: xLoc, y: yLoc, width: Double(squareSizeX), height: Double(squareSizeY))
-                squares[y - 1][x - 1].backgroundColor = UIColor.yellow
+                squares[y - 1][x - 1].backgroundColor = UIColor.lightGray
             }
         }
     }
@@ -109,7 +159,7 @@ class MineSweeperViewController: UIViewController {
         firstGuess = true
         for y in 0..<squares.count {
             for x in 0..<squares[0].count {
-                squares[y][x].backgroundColor = UIColor.yellow
+                squares[y][x].backgroundColor = UIColor.lightGray
                 mineLocations[y][x] = false
                 surroundingMines[y][x] = 0
             }
@@ -138,7 +188,7 @@ class MineSweeperViewController: UIViewController {
         populateMineLocations(arr: mineLocs)
 
 //        print(mineLocs)
-        markMines()
+//        markMines()
         countSurrounding()
     }
     
@@ -170,53 +220,53 @@ class MineSweeperViewController: UIViewController {
         
         if (xx == 0 && (yy != 0 && yy != (squares.count - 1))) {   // left wall, not a corner
             nextNeighbors.append([yy - 1, xx])
-//            nextNeighbors.append([yy - 1, xx + 1])
+            nextNeighbors.append([yy - 1, xx + 1])
             nextNeighbors.append([yy, xx + 1])
-//            nextNeighbors.append([yy + 1, xx + 1])
+            nextNeighbors.append([yy + 1, xx + 1])
             nextNeighbors.append([yy + 1, xx])
         } else if (xx == (squares[0].count - 1) && (yy != 0 && yy != (squares.count - 1))) {   // right wall, not a corner
             nextNeighbors.append([yy - 1, xx])
-//            nextNeighbors.append([yy - 1, xx - 1])
+            nextNeighbors.append([yy - 1, xx - 1])
             nextNeighbors.append([yy, xx - 1])
-//            nextNeighbors.append([yy + 1, xx - 1])
+            nextNeighbors.append([yy + 1, xx - 1])
             nextNeighbors.append([yy + 1, xx])
         } else if (yy == 0 && (xx != 0 && xx != (squares[0].count - 1))) {     // top wall, not a corner
             nextNeighbors.append([yy, xx - 1])
-//            nextNeighbors.append([yy + 1, xx - 1])
+            nextNeighbors.append([yy + 1, xx - 1])
             nextNeighbors.append([yy + 1, xx])
-//            nextNeighbors.append([yy + 1, xx + 1])
+            nextNeighbors.append([yy + 1, xx + 1])
             nextNeighbors.append([yy, xx + 1])
         } else if (yy == (squares.count - 1) && (xx != 0 && xx != (squares[0].count - 1))) {   // bottom wall, not a corner
             nextNeighbors.append([yy, xx - 1])
-//            nextNeighbors.append([yy - 1, xx - 1])
+            nextNeighbors.append([yy - 1, xx - 1])
             nextNeighbors.append([yy - 1, xx])
-//            nextNeighbors.append([yy - 1, xx + 1])
+            nextNeighbors.append([yy - 1, xx + 1])
             nextNeighbors.append([yy, xx + 1])
         } else if (yy == 0 && xx == 0) { // top left corner
             nextNeighbors.append([yy, xx + 1])
             nextNeighbors.append([yy + 1, xx])
-//            nextNeighbors.append([yy + 1, xx + 1])
+            nextNeighbors.append([yy + 1, xx + 1])
         } else if (yy == 0 && xx == (squares[0].count - 1)) { // top right corner
             nextNeighbors.append([yy, xx - 1])
             nextNeighbors.append([yy + 1, xx])
-//            nextNeighbors.append([yy + 1, xx - 1])
+            nextNeighbors.append([yy + 1, xx - 1])
         } else if (yy == (squares.count - 1) && xx == 0) { // bottom left corner
             nextNeighbors.append([yy, xx + 1])
             nextNeighbors.append([yy - 1, xx])
-//            nextNeighbors.append([yy - 1, xx + 1])
+            nextNeighbors.append([yy - 1, xx + 1])
         } else if (yy == (squares.count - 1) && xx == (squares[0].count - 1)) {  // bottom right corner
             nextNeighbors.append([yy, xx - 1])
             nextNeighbors.append([yy - 1, xx])
-//            nextNeighbors.append([yy - 1, xx - 1])
+            nextNeighbors.append([yy - 1, xx - 1])
         } else {
-//            nextNeighbors.append([yy - 1, xx - 1])
+            nextNeighbors.append([yy - 1, xx - 1])
             nextNeighbors.append([yy - 1, xx])
-//            nextNeighbors.append([yy - 1, xx + 1])
+            nextNeighbors.append([yy - 1, xx + 1])
             nextNeighbors.append([yy, xx - 1])
             nextNeighbors.append([yy, xx + 1])
-//            nextNeighbors.append([yy + 1, xx - 1])
+            nextNeighbors.append([yy + 1, xx - 1])
             nextNeighbors.append([yy + 1, xx])
-//            nextNeighbors.append([yy + 1, xx + 1])
+            nextNeighbors.append([yy + 1, xx + 1])
         }
         
         for n in nextNeighbors {
@@ -225,7 +275,7 @@ class MineSweeperViewController: UIViewController {
                 neighbors.append(n)
 
                 if (surroundingMines[n[0]][n[1]] == 0) {
-                    if (squares[n[0]][n[1]].backgroundColor != UIColor.black) {
+                    if (squares[n[0]][n[1]].backgroundColor != UIColor.darkGray) {
                         getNeighborSquares(xx: n[1], yy: n[0])
                     }
                 }
@@ -241,8 +291,8 @@ class MineSweeperViewController: UIViewController {
         var found = false
 
         while (!found) {
-            var y = squares.randomElement()
-            var x = y!.randomElement()
+            let y = squares.randomElement()
+            let x = y!.randomElement()
             
             for yyy in 0..<squares.count {
                 for xxx in 0..<squares[0].count {
@@ -253,9 +303,9 @@ class MineSweeperViewController: UIViewController {
                     if (squares[yyy][xxx].tag == x!.tag) {
                         if (!mineLocations[yyy][xxx]) {
                             mineLocations[yyy][xxx] = true
-                            squares[yyy][xxx].backgroundColor = UIColor.red
+                            squares[yyy][xxx].backgroundColor = UIColor.lightGray
                             mineLocations[yy][xx] = false
-                            squares[yy][xx].backgroundColor = UIColor.black
+                            squares[yy][xx].backgroundColor = UIColor.darkGray
                             found = true
                         }
                     }
@@ -270,7 +320,13 @@ class MineSweeperViewController: UIViewController {
         }
         
         countSurrounding()
-        getNeighborSquares(xx: xx, yy: yy)
+        squareLabels[yy][xx].isHidden = false
+        changeTextColor(y: yy, x: xx)
+        
+        if (surroundingMines[yy][xx] == 0) {
+            getNeighborSquares(xx: xx, yy: yy)
+        }
+        
     }
     
     func countSurrounding() {
@@ -287,7 +343,7 @@ class MineSweeperViewController: UIViewController {
                     } else if (x == (squares[0].count - 1) && (y != 0 && y != (squares.count - 1))) {   // right wall, not a corner
                         surroundingMines[y - 1][x] += 1
                         surroundingMines[y - 1][x - 1] += 1
-                        surroundingMines[y][x] += 1
+                        surroundingMines[y][x - 1] += 1
                         surroundingMines[y + 1][x - 1] += 1
                         surroundingMines[y + 1][x] += 1
                     } else if (y == 0 && (x != 0 && x != (squares[0].count - 1))) {     // top wall, not a corner
@@ -339,102 +395,217 @@ class MineSweeperViewController: UIViewController {
         squareSizeY = (Int(v.frame.height) / (squares.count + 1))
         for y in 0..<squares.count {
             for x in 0..<squares[0].count {
-                let t = UILabel()
-                t.text = "\((x + 1) + ((y) * squares[0].count)) : \(surroundingMines[y][x])"
+//                let t = UILabel()
                 
-                if (squares[y][x].backgroundColor == UIColor.red) {
-                    t.textColor = UIColor.white
+                if (surroundingMines[y][x] == 0 || mineLocations[y][x]) {
+                    squareLabels[y][x].text = ""
                 } else {
-                    t.textColor = UIColor.red
+//                    squareLabels[y][x].text = "\((x + 1) + ((y) * squares[0].count)) : \(surroundingMines[y][x])"
+                    squareLabels[y][x].text = "\(surroundingMines[y][x])"
                 }
+                
+                
+//                if (squares[y][x].backgroundColor == UIColor.red) {
+//                    squareLabels[y][x].textColor = UIColor.white
+//                } else {
+//                    squareLabels[y][x].textColor = UIColor.red
+//                }
 
-                t.isHidden = false
-                t.font = UIFont.systemFont(ofSize: 9.0)
-                t.frame = CGRect(x: 0, y: 0, width: squareSizeX, height: squareSizeY)
-                if (squares[y][x].subviews.count > 0) {
-                    for sView in squares[y][x].subviews {
-                        sView.removeFromSuperview()
-                    }
-                    squares[y][x].addSubview(t)
-                } else {
-//                    print(false)
-                    squares[y][x].addSubview(t)
-                }
+
+//                t.isHidden = false
+//                t.font = UIFont.systemFont(ofSize: 9.0)
+                squareLabels[y][x].frame = CGRect(x: 0, y: 0, width: squareSizeX, height: squareSizeY)
+//                if (squares[y][x].subviews.count > 0) {
+//                    for sView in squares[y][x].subviews {
+//                        sView.removeFromSuperview()
+//                        squareLabels[y].remove(at: x)
+//                    }
+//                    squares[y][x].addSubview(t)
+////                    squareLabels
+//                } else {
+////                    print(false)
+//                    squares[y][x].addSubview(t)
+//                }
             }
         }
     }
     
     func checkEnd() {
         var count = 0
+        var flagCount = 0
         for y in 0..<squares.count {
             for x in 0..<squares[0].count {
-                if (squares[y][x].backgroundColor == UIColor.black || squares[y][x].backgroundColor == UIColor.red) {
+                if (squareLabels[y][x].text == "X" && mineLocations[y][x]) {
+                    flagCount += 1
+                }
+                if (squareLabels[y][x].text == "X" && !mineLocations[y][x]) {
+                    flagCount -= 1
+                }
+                if (squares[y][x].backgroundColor == UIColor.lightGray || squareLabels[y][x].text == "X") {
                     count += 1
                 }
             }
         }
         
         print(count)
-        if (count == (squares.count * squares[0].count)) {
-            v.isHidden = true
-            v.removeFromSuperview()
+        if (count == mineCount || flagCount == mineCount) {
+            blockGameView.isHidden = false
+            endgameView.isHidden = false
+            newGameButton.isHidden = false
+            exitButton.isHidden = false
+            endgameView.layer.zPosition = 10
+            blockGameView.layer.zPosition = 10
+            newGameButton.layer.zPosition = 10
+            exitButton.layer.zPosition = 10
+            self.view.sendSubviewToBack(v)
             resultLabel.text = "!!! YOU WIN !!!"
         }
         
     }
     
+    func changeTextColor(y: Int, x: Int) {
+        switch surroundingMines[y][x] {
+            case 1:
+                print("color change")
+                squareLabels[y][x].textColor = oneSurround
+            case 2:
+                squareLabels[y][x].textColor = twoSurround
+            case 3:
+                squareLabels[y][x].textColor = threeSurround
+            case 4:
+                squareLabels[y][x].textColor = fourSurround
+            case 5:
+                squareLabels[y][x].textColor = fiveSurround
+            case 6:
+                squareLabels[y][x].textColor = sixSurround
+            case 7:
+                squareLabels[y][x].textColor = sevenSurround
+            case 8:
+                squareLabels[y][x].textColor = eightSurround
+            default:
+                squareLabels[y][x].textColor = UIColor.black
+        }
+    }
+    
     @objc func minePressed(_ sender:UIButton!) {
 //        var pressed = [Int]()
-        for y in 0..<squares.count {
-            for x in 0..<squares[0].count {
-                if (sender.tag == squares[y][x].tag) {
-                    if (!mineLocations[y][x]) {
-//                        pressed.append(y)
-//                        pressed.append(x)
-                        if (surroundingMines[y][x] == 0) {
-                            getNeighborSquares(xx: x, yy: y)
-                            
-                        }
-//                        v.isHidden = true
-                        sender.backgroundColor = UIColor.black
-                    } else {
-                        if (firstGuess) {
-
-                            changeBombLoc(yy: y, xx: x)
+        
+        if (!questionMineSwitch.isOn && !flagMineSwitch.isOn) {
+            for y in 0..<squares.count {
+                for x in 0..<squares[0].count {
+                    if (sender.tag == squares[y][x].tag) {
+                        if (!mineLocations[y][x]) {
+    //                        pressed.append(y)
+    //                        pressed.append(x)
+                            if (surroundingMines[y][x] == 0 && squares[y][x].backgroundColor == UIColor.lightGray) {
+                                getNeighborSquares(xx: x, yy: y)
+                                
+                            }
+    //                        v.isHidden = true
+                            changeTextColor(y: y, x: x)
+                            squareLabels[y][x].isHidden = false
+                            sender.backgroundColor = UIColor.darkGray
                         } else {
-                            v.isHidden = true
-                            v.removeFromSuperview()
-                            resultLabel.text = "YOU LOSE"
+                            if (firstGuess) {
+
+                                changeBombLoc(yy: y, xx: x)
+                            } else {
+    //                            v.isHidden = true
+    //                            v.removeFromSuperview()
+                                blockGameView.isHidden = false
+                                endgameView.isHidden = false
+                                newGameButton.isHidden = false
+                                exitButton.isHidden = false
+                                endgameView.layer.zPosition = 10
+                                blockGameView.layer.zPosition = 10
+                                newGameButton.layer.zPosition = 10
+                                exitButton.layer.zPosition = 10
+                                self.view.sendSubviewToBack(v)
+                                resultLabel.text = "YOU LOSE"
+                            }
                         }
                     }
                 }
             }
-        }
-        
-        if (firstGuess) {
-            firstGuess = false
-        }
-        
-        for x in neighbors {
-            if (!mineLocations[x[0]][x[1]]) {
-                if (surroundingMines[x[0]][x[1]] == 0) {
-                    squares[x[0]][x[1]].backgroundColor = UIColor.black
-                } else {
-//                    if (pressed.count > 0) {
-//                        if (x[0] != pressed[0] && x[1] != pressed[1]) {
-                            squares[x[0]][x[1]].backgroundColor = UIColor.green
-//                        }
-//                    }
+            
+            if (firstGuess) {
+                firstGuess = false
+            }
+            
+            for x in neighbors {
+                if (!mineLocations[x[0]][x[1]]) {
+                    squareLabels[x[0]][x[1]].isHidden = false
+    //                if (surroundingMines[x[0]][x[1]] == 0) {
+                        squares[x[0]][x[1]].backgroundColor = UIColor.darkGray
+    //                } else {
+    //                    if (pressed.count > 0) {
+    //                        if (x[0] != pressed[0] && x[1] != pressed[1]) {
+    //                    squares[x[0]][x[1]].backgroundColor = UIColor.green
+                        changeTextColor(y: x[0], x: x[1])
+    //                    squareLabels[x[0]][x[1]].isHidden = false
+    //                        }
+    //                    }
 
-                    
+                        
+    //                }
+                }
+
+
+            }
+            neighbors.removeAll()
+            
+        } else {
+            if (questionMineSwitch.isOn) {
+                flagMineSwitch.isOn = false
+                for y in 0..<squares.count {
+                    for x in 0..<squares[0].count {
+                        if (squares[y][x].tag == sender.tag) {
+                            if (squareLabels[y][x].text == "?") {
+                                squareLabels[y][x].text = ""
+                                squareLabels[y][x].isHidden = true
+                            } else {
+                                squareLabels[y][x].textColor = UIColor.white
+                                squareLabels[y][x].text = "?"
+                                squareLabels[y][x].isHidden = false
+                            }
+                            
+                        }
+
+                    }
+                }
+            } else {
+                questionMineSwitch.isOn = false
+                for y in 0..<squares.count {
+                    for x in 0..<squares[0].count {
+                        if (squares[y][x].tag == sender.tag) {
+                            if (squareLabels[y][x].text == "X") {
+                                squareLabels[y][x].text = ""
+                                squareLabels[y][x].isHidden = true
+                            } else {
+                                squareLabels[y][x].textColor = UIColor.red
+                                squareLabels[y][x].text = "X"
+                                squareLabels[y][x].isHidden = false
+                            }
+                            
+                        }
+
+                    }
                 }
             }
-
-
+            
         }
-        neighbors.removeAll()
-        
+
         checkEnd()
 //        print(sender.tag)
+    }
+    @IBAction func questionMineSwitchTapped(_ sender: Any) {
+        if (flagMineSwitch.isOn) {
+            flagMineSwitch.isOn = false
+        }
+    }
+    @IBAction func flagMineSwitchTapped(_ sender: Any) {
+        if (questionMineSwitch.isOn) {
+            questionMineSwitch.isOn = false
+        }
     }
 }
