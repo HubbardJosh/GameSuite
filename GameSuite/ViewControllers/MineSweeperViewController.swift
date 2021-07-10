@@ -434,15 +434,8 @@ class MineSweeperViewController: UIViewController {
     
     func checkEnd() {
         var count = 0
-        var flagCount = 0
         for y in 0..<squares.count {
             for x in 0..<squares[0].count {
-                if (squareLabels[y][x].text == "X" && mineLocations[y][x]) {
-                    flagCount += 1
-                }
-                if (squareLabels[y][x].text == "X" && !mineLocations[y][x]) {
-                    flagCount -= 1
-                }
                 if (squares[y][x].backgroundColor == UIColor.lightGray || squareLabels[y][x].text == "X") {
                     count += 1
                 }
@@ -450,7 +443,7 @@ class MineSweeperViewController: UIViewController {
         }
         
         print(count)
-        if (count == mineCount || flagCount == mineCount) {
+        if (count == mineCount) {
             blockGameView.isHidden = false
             endgameView.isHidden = false
             newGameButton.isHidden = false
