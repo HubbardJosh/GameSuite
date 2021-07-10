@@ -141,7 +141,6 @@ class MineSweeperViewController: UIViewController {
     func setMineCount(count: Int) {
         if (count >= (squares.count * squares[0].count)) {
             mineCount = (squares.count * squares[0].count) - 1
-//            print(mineCount)
         } else if (count < 1) {
             mineCount = 1
         } else {
@@ -182,9 +181,6 @@ class MineSweeperViewController: UIViewController {
         }
         mineLocs.sort()
         populateMineLocations(arr: mineLocs)
-
-//        print(mineLocs)
-//        markMines()
         countSurrounding()
     }
     
@@ -278,13 +274,8 @@ class MineSweeperViewController: UIViewController {
                         }
                     }
                 }
-
             }
         }
-
-        
-
-//        print(neighbors.count)
     }
     
     func changeBombLoc(yy: Int, xx: Int) {
@@ -309,13 +300,7 @@ class MineSweeperViewController: UIViewController {
                             found = true
                         }
                     }
-//                    if (found) {
-//                        break
-//                    }
                 }
-//                if (found) {
-//                    break
-//                }
             }
         }
         
@@ -395,37 +380,13 @@ class MineSweeperViewController: UIViewController {
         squareSizeY = (Int(v.frame.height) / (squares.count + 1))
         for y in 0..<squares.count {
             for x in 0..<squares[0].count {
-//                let t = UILabel()
-                
                 if (surroundingMines[y][x] == 0 || mineLocations[y][x]) {
                     squareLabels[y][x].text = ""
                 } else {
-//                    squareLabels[y][x].text = "\((x + 1) + ((y) * squares[0].count)) : \(surroundingMines[y][x])"
                     squareLabels[y][x].text = "\(surroundingMines[y][x])"
                 }
-                
-                
-//                if (squares[y][x].backgroundColor == UIColor.red) {
-//                    squareLabels[y][x].textColor = UIColor.white
-//                } else {
-//                    squareLabels[y][x].textColor = UIColor.red
-//                }
 
-
-//                t.isHidden = false
-//                t.font = UIFont.systemFont(ofSize: 9.0)
                 squareLabels[y][x].frame = CGRect(x: 0, y: 0, width: squareSizeX, height: squareSizeY)
-//                if (squares[y][x].subviews.count > 0) {
-//                    for sView in squares[y][x].subviews {
-//                        sView.removeFromSuperview()
-//                        squareLabels[y].remove(at: x)
-//                    }
-//                    squares[y][x].addSubview(t)
-////                    squareLabels
-//                } else {
-////                    print(false)
-//                    squares[y][x].addSubview(t)
-//                }
             }
         }
     }
@@ -440,7 +401,6 @@ class MineSweeperViewController: UIViewController {
             }
         }
         
-        print(count)
         if (count == mineCount) {
             blockGameView.isHidden = false
             endgameView.isHidden = false
@@ -460,7 +420,6 @@ class MineSweeperViewController: UIViewController {
         if (squareLabels[y][x].text != "?" && squareLabels[y][x].text != "X" && squareLabels[y][x].text != "") {
             switch surroundingMines[y][x] {
                 case 1:
-                    print("color change")
                     squareLabels[y][x].textColor = oneSurround
                 case 2:
                     squareLabels[y][x].textColor = twoSurround
@@ -491,30 +450,22 @@ class MineSweeperViewController: UIViewController {
     }
     
     @objc func minePressed(_ sender:UIButton!) {
-//        var pressed = [Int]()
         if (!questionMineSwitch.isOn && !flagMineSwitch.isOn) {
             for y in 0..<squares.count {
                 for x in 0..<squares[0].count {
                     if (sender.tag == squares[y][x].tag) {
                         if (squares[y][x].backgroundColor != UIColor.darkGray && squareLabels[y][x].text != "?" && squareLabels[y][x].text != "X") {
                             if (!mineLocations[y][x]) {
-        //                        pressed.append(y)
-        //                        pressed.append(x)
                                 if (surroundingMines[y][x] == 0 && squares[y][x].backgroundColor == UIColor.lightGray) {
                                     getNeighborSquares(xx: x, yy: y)
-                                    
                                 }
-        //                        v.isHidden = true
                                 changeTextColor(y: y, x: x)
                                 squareLabels[y][x].isHidden = false
                                 sender.backgroundColor = UIColor.darkGray
                             } else {
                                 if (firstGuess) {
-
                                     changeBombLoc(yy: y, xx: x)
                                 } else {
-        //                            v.isHidden = true
-        //                            v.removeFromSuperview()
                                     blockGameView.isHidden = false
                                     endgameView.isHidden = false
                                     newGameButton.isHidden = false
@@ -528,7 +479,6 @@ class MineSweeperViewController: UIViewController {
                                 }
                             }
                         }
-                        
                     }
                 }
             }
@@ -540,22 +490,9 @@ class MineSweeperViewController: UIViewController {
             for x in neighbors {
                 if (!mineLocations[x[0]][x[1]] && squareLabels[x[0]][x[1]].text != "X" && squareLabels[x[0]][x[1]].text != "?") {
                     squareLabels[x[0]][x[1]].isHidden = false
-    //                if (surroundingMines[x[0]][x[1]] == 0) {
-                        squares[x[0]][x[1]].backgroundColor = UIColor.darkGray
-    //                } else {
-    //                    if (pressed.count > 0) {
-    //                        if (x[0] != pressed[0] && x[1] != pressed[1]) {
-    //                    squares[x[0]][x[1]].backgroundColor = UIColor.green
-                        changeTextColor(y: x[0], x: x[1])
-    //                    squareLabels[x[0]][x[1]].isHidden = false
-    //                        }
-    //                    }
-
-                        
-    //                }
+                    squares[x[0]][x[1]].backgroundColor = UIColor.darkGray
+                    changeTextColor(y: x[0], x: x[1])
                 }
-
-
             }
             neighbors.removeAll()
             
@@ -575,10 +512,7 @@ class MineSweeperViewController: UIViewController {
                                     squareLabels[y][x].isHidden = false
                                 }
                             }
-
-                            
                         }
-
                     }
                 }
             } else {
@@ -596,24 +530,21 @@ class MineSweeperViewController: UIViewController {
                                     squareLabels[y][x].isHidden = false
                                 }
                             }
-
-                            
                         }
-
                     }
                 }
             }
-            
         }
 
         checkEnd()
-//        print(sender.tag)
     }
+    
     @IBAction func questionMineSwitchTapped(_ sender: Any) {
         if (flagMineSwitch.isOn) {
             flagMineSwitch.isOn = false
         }
     }
+    
     @IBAction func flagMineSwitchTapped(_ sender: Any) {
         if (questionMineSwitch.isOn) {
             questionMineSwitch.isOn = false
