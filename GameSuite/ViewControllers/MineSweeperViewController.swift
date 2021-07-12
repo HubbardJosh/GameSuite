@@ -113,7 +113,6 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
 
                 t.isHidden = true
                 t.font = UIFont.systemFont(ofSize: 12.0, weight: .bold)
-                t.textAlignment = .center
                 
                 squares[yy].append(UIButton())
                 squareLabels[yy].append(t)
@@ -121,7 +120,6 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
                 
                 mineLocations[yy].append(false)
                 surroundingMines[yy].append(0)
-                
                 squares[yy][xx].addSubview(t)
             }
         }
@@ -134,8 +132,8 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
         var squareSizeX = 0
         var squareSizeY = 0
         
-        squareSizeX = (Int(v.frame.height) / (squares[0].count + 1))
-        squareSizeY = (Int(v.frame.height) / (squares.count + 1))
+        squareSizeX = (Int(v.frame.width) / (squares[0].count))
+        squareSizeY = (Int(v.frame.height) / (squares.count))
         
         for y in 1..<squares.count + 1 {
             for x in 1..<squares[0].count + 1 {
@@ -143,13 +141,29 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
                 squares[y - 1][x - 1].tag = (x + ((y - 1) * squares[0].count))
                 squares[y - 1][x - 1].addTarget(self, action: #selector(minePressed(_:)), for: .touchUpInside)
 
-                let xSpace = ((Double(v.frame.width) - (Double(squares[0].count) * Double(squareSizeX))) / (Double(squares[0].count) - 1.0))
-                let ySpace = ((Double(v.frame.width) - (Double(squares.count) * Double(squareSizeY))) / (Double(squares.count) - 1.0))
+                var xSpace = ((Double(v.frame.width) - (Double(squares[0].count) * Double(squareSizeX))) / (Double(squares[0].count) - 1.0))
+                var ySpace = ((Double(v.frame.width) - (Double(squares.count) * Double(squareSizeY))) / (Double(squares.count) - 1.0))
+                var xAlt = 0.0
+                var yAlt = 0.0
+                if (Double(xSpace) > 5.0) {
+                    xAlt = Double(xSpace) - 5.0
+                    squareSizeX -= Int(xAlt)
+                    xSpace = 5
+                }
+                if (Double(ySpace) > 5.0) {
+                    yAlt = Double(ySpace) - 5.0
+                    squareSizeY -= Int(yAlt)
+                    ySpace = 5
+                }
+                
                 let xLoc = (xSpace * (Double(x) - 1.0)) + (Double(squareSizeX) * (Double(x) - 1.0))
                 let yLoc = (ySpace * (Double(y) - 1.0)) + (Double(squareSizeY) * (Double(y) - 1.0))
                 
                 squares[y - 1][x - 1].frame = CGRect(x: xLoc, y: yLoc, width: Double(squareSizeX), height: Double(squareSizeY))
                 squares[y - 1][x - 1].backgroundColor = UIColor.lightGray
+                
+                squareSizeX += Int(xAlt)
+                squareSizeY += Int(yAlt)
             }
         }
     }
@@ -414,8 +428,8 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
         var squareSizeX = 0
         var squareSizeY = 0
         
-        squareSizeX = (Int(v.frame.height) / (squares[0].count + 1))
-        squareSizeY = (Int(v.frame.height) / (squares.count + 1))
+        squareSizeX = (Int(v.frame.width) / (squares[0].count))
+        squareSizeY = (Int(v.frame.height) / (squares.count))
         for y in 0..<squares.count {
             for x in 0..<squares[0].count {
                 if (surroundingMines[y][x] == 0 || mineLocations[y][x]) {
@@ -424,6 +438,8 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
                     squareLabels[y][x].text = "\(surroundingMines[y][x])"
                 }
 
+                squareLabels[y][x].textAlignment = .center
+                squareLabels[y][x].center = squares[y][x].center
                 squareLabels[y][x].frame = CGRect(x: 0, y: 0, width: squareSizeX, height: squareSizeY)
             }
         }
