@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MineSweeperViewController: UIViewController {
+class MineSweeperViewController: UIViewController, UITextFieldDelegate {
     
     var screenDimensions = UIScreen.main.bounds
     
@@ -15,10 +15,10 @@ class MineSweeperViewController: UIViewController {
     
     var squares = [[UIButton]]()
     var squareLabels = [[UILabel]]()
-    var xSquareCount = 10
-    var ySquareCount = 10
+    var xSquareCount = 3
+    var ySquareCount = 3
     
-    var mineCount = 10
+    var mineCount = 3
     var mineLocations = [[Bool]]()
     var surroundingMines = [[Int]]()
     
@@ -40,11 +40,22 @@ class MineSweeperViewController: UIViewController {
     @IBOutlet weak var resultLabel: UILabel!
     @IBOutlet weak var newGameButton: UIButton!
     @IBOutlet weak var exitButton: UIButton!
+    @IBOutlet weak var colMineCountLabel: UILabel!
+    @IBOutlet weak var colMineCountTextField: UITextField!
+    @IBOutlet weak var rowCountLabel: UILabel!
+    @IBOutlet weak var rowCountTextField: UITextField!
+    @IBOutlet weak var colRowMineTextFieldStack: UIStackView!
+    @IBOutlet weak var rowCountTextFieldStack: UIStackView!
+    @IBOutlet weak var mineCountButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         endgameView.layer.cornerRadius = 3
         v.layer.cornerRadius = 3
+        rowCountTextField.delegate = self
+        colMineCountTextField.delegate = self
+        addDoneButtonOnKeyboard()
         
         blockGameView.isHidden = true
         endgameView.isHidden = true
@@ -65,7 +76,6 @@ class MineSweeperViewController: UIViewController {
     }
     
     @IBAction func newGameButtonPressed(_ sender: Any) {
-        instantiateSquares()
         resetSquares()
         setupMineFieldCount(x: xSquareCount, y: ySquareCount)
         questionMineSwitch.isOn = false
@@ -86,6 +96,12 @@ class MineSweeperViewController: UIViewController {
         squareLabels.removeAll()
         mineLocations.removeAll()
         surroundingMines.removeAll()
+        
+        if (v.subviews.count > 0) {
+            for z in v.subviews {
+                z.removeFromSuperview()
+            }
+        }
         
         for yy in 0..<y {
             squares.append([])
@@ -146,8 +162,29 @@ class MineSweeperViewController: UIViewController {
         } else {
             mineCount = count
         }
-                
-        setMinePositions(numMines: mineCount)
+    }
+    
+    func setBoardDimensions(cols: Int, rows: Int) {
+        if ((cols > 2 && cols < 16) && (rows > 2 && rows < 16)) {
+            xSquareCount = cols
+            ySquareCount = rows
+        } else {
+            if (cols > 15) {
+                xSquareCount = 15
+            } else if (cols < 3) {
+                xSquareCount = 3
+            } else {
+                xSquareCount = cols
+            }
+            
+            if (rows > 15) {
+                ySquareCount = 15
+            } else if (rows < 3) {
+                ySquareCount = 3
+            } else {
+                ySquareCount = rows
+            }
+        }
     }
     
     func resetSquares() {
@@ -181,7 +218,7 @@ class MineSweeperViewController: UIViewController {
         }
         mineLocs.sort()
         populateMineLocations(arr: mineLocs)
-        countSurrounding()
+        countSurrounding(yCount: ySquareCount, xCount: xSquareCount)
     }
     
     func populateMineLocations(arr: [Int]) {
@@ -206,6 +243,7 @@ class MineSweeperViewController: UIViewController {
             }
         }
     }
+    
     var neighbors = [[Int]]()
     func getNeighborSquares(xx: Int, yy: Int) {
         var nextNeighbors = [[Int]]()
@@ -304,7 +342,7 @@ class MineSweeperViewController: UIViewController {
             }
         }
         
-        countSurrounding()
+        countSurrounding(yCount: ySquareCount, xCount: xSquareCount)
         squareLabels[yy][xx].isHidden = false
         changeTextColor(y: yy, x: xx)
         
@@ -314,9 +352,9 @@ class MineSweeperViewController: UIViewController {
         
     }
     
-    func countSurrounding() {
-        for y in 0..<((xSquareCount * ySquareCount) / xSquareCount) {
-            for x in 0..<((xSquareCount * ySquareCount) / ySquareCount) {
+    func countSurrounding(yCount: Int, xCount: Int) {
+        for y in 0..<yCount {
+            for x in 0..<xCount {
                 if (mineLocations[y][x]) {
                     
                     if (x == 0 && (y != 0 && y != (squares.count - 1))) {   // left wall, not a corner
@@ -549,5 +587,76 @@ class MineSweeperViewController: UIViewController {
         if (questionMineSwitch.isOn) {
             questionMineSwitch.isOn = false
         }
+    }
+    
+    @IBAction func boardSizeTapped(_ sender: Any) {
+        colRowMineTextFieldStack.isHidden = false
+        rowCountTextFieldStack.isHidden = false
+        colMineCountLabel.text = "Cols:"
+        colMineCountTextField.placeholder = "3 - 15"
+        rowCountLabel.text = "Rows:"
+        rowCountTextField.placeholder = "3 - 15"
+    }
+    
+    @IBAction func mineCountTapped(_ sender: Any) {
+        colRowMineTextFieldStack.isHidden = false
+        rowCountTextFieldStack.isHidden = true
+        colMineCountLabel.text = "Mines:"
+        colMineCountTextField.placeholder = "1 - \((xSquareCount * ySquareCount) - 1)"
+    }
+    
+    @IBAction func doneColRowMineCountTapped(_ sender: Any) {
+        if (rowCountTextFieldStack.isHidden) {  // changing mine count
+            if (colMineCountTextField.hasText) {
+                let newCount = Int(colMineCountTextField.text!)
+
+                setMineCount(count: newCount!)
+                colRowMineTextFieldStack.isHidden = true
+                newGameButton.sendActions(for: .touchUpInside)
+            }
+        } else {    // changing cols and rows
+            if (colMineCountTextField.hasText && rowCountTextField.hasText) {
+                let newCol = Int(colMineCountTextField.text!)
+                let newRow = Int(rowCountTextField.text!)
+                print("newC \(newCol!)")
+                print(newRow!)
+                
+                setBoardDimensions(cols: newCol!, rows: newRow!)
+                
+                colMineCountTextField.text?.removeAll()
+                rowCountTextField.text?.removeAll()
+                mineCountButton.sendActions(for: .touchUpInside)
+            }
+        }
+    }
+    
+    
+    func addDoneButtonOnKeyboard() {
+        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
+        doneToolbar.barStyle       = UIBarStyle.default
+        let flexSpace              = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        let done: UIBarButtonItem  = UIBarButtonItem(title: "Done", style: UIBarButtonItem.Style.done, target: self, action: #selector(MineSweeperViewController.doneButtonAction))
+
+        var items = [UIBarButtonItem]()
+        items.append(flexSpace)
+        items.append(done)
+
+        doneToolbar.items = items
+        doneToolbar.sizeToFit()
+
+        self.colMineCountTextField.inputAccessoryView = doneToolbar
+        self.rowCountTextField.inputAccessoryView = doneToolbar
+    }
+
+    @objc func doneButtonAction() {
+        if (self.colMineCountTextField.isFirstResponder) {
+            self.colMineCountTextField.resignFirstResponder()
+        } else {
+            self.rowCountTextField.resignFirstResponder()
+        }
+        
+        /* Or:
+        self.view.endEditing(true);
+        */
     }
 }

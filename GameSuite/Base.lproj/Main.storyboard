@@ -16,22 +16,37 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sHc-1N-7ib">
-                                <rect key="frame" x="158" y="423" width="98" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="3Xa-RB-D2X"/>
-                                </constraints>
-                                <state key="normal" title="Mine Sweeper"/>
-                                <connections>
-                                    <segue destination="VKP-Vn-UyS" kind="showDetail" id="mZW-e2-TgG"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="BEW-G8-aUJ">
+                                <rect key="frame" x="158" y="390.5" width="98" height="115"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sHc-1N-7ib">
+                                        <rect key="frame" x="0.0" y="0.0" width="98" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="3Xa-RB-D2X"/>
+                                        </constraints>
+                                        <state key="normal" title="Mine Sweeper"/>
+                                        <connections>
+                                            <segue destination="VKP-Vn-UyS" kind="showDetail" id="mZW-e2-TgG"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Pv-yc-D1K">
+                                        <rect key="frame" x="0.0" y="65" width="98" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="POz-qB-HUo"/>
+                                        </constraints>
+                                        <state key="normal" title="Tic Tac Toe"/>
+                                        <connections>
+                                            <segue destination="8Kg-gM-pRi" kind="showDetail" id="rG5-Rb-pPB"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="sHc-1N-7ib" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="4w8-Wd-76b"/>
-                            <constraint firstItem="sHc-1N-7ib" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="gXD-L6-RmD"/>
+                            <constraint firstItem="BEW-G8-aUJ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="8ac-fX-Xtr"/>
+                            <constraint firstItem="BEW-G8-aUJ" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="fub-ng-hpQ"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -133,11 +148,94 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="hYF-c3-a9g">
+                                <rect key="frame" x="15" y="54" width="384" height="30"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="66b-Wz-MLo">
+                                        <rect key="frame" x="42.5" y="0.0" width="299" height="30"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eZs-UP-TDf">
+                                                <rect key="frame" x="0.0" y="0.0" width="131" height="30"/>
+                                                <state key="normal" title="Change Board Size"/>
+                                                <connections>
+                                                    <action selector="boardSizeTapped:" destination="VKP-Vn-UyS" eventType="touchUpInside" id="59E-Rm-QkS"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ApD-z1-ZD5">
+                                                <rect key="frame" x="163" y="0.0" width="136" height="30"/>
+                                                <state key="normal" title="Change Mine Count"/>
+                                                <connections>
+                                                    <action selector="mineCountTapped:" destination="VKP-Vn-UyS" eventType="touchUpInside" id="SVY-iy-9XM"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="070-dX-VpB">
+                                        <rect key="frame" x="27" y="0.0" width="330" height="0.0"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="uDL-dc-cuk">
+                                                <rect key="frame" x="0.0" y="0.0" width="126.5" height="0.0"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kf6-Un-QPf">
+                                                        <rect key="frame" x="0.0" y="0.0" width="41.5" height="0.0"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="atE-vm-LHf">
+                                                        <rect key="frame" x="51.5" y="0.0" width="75" height="0.0"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="75" id="fai-kE-eiL"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="VKP-Vn-UyS" id="3DB-sf-esS"/>
+                                                        </connections>
+                                                    </textField>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="UQE-j1-Tuz">
+                                                <rect key="frame" x="146.5" y="0.0" width="126.5" height="0.0"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4IE-m1-0gS">
+                                                        <rect key="frame" x="0.0" y="0.0" width="41.5" height="0.0"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fR1-9h-D22">
+                                                        <rect key="frame" x="51.5" y="0.0" width="75" height="0.0"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="75" id="vos-Co-NJd"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="VKP-Vn-UyS" id="sfU-jZ-eRd"/>
+                                                        </connections>
+                                                    </textField>
+                                                </subviews>
+                                            </stackView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gW3-9L-3hn">
+                                                <rect key="frame" x="293" y="0.0" width="37" height="0.0"/>
+                                                <state key="normal" title="Done"/>
+                                                <connections>
+                                                    <action selector="doneColRowMineCountTapped:" destination="VKP-Vn-UyS" eventType="touchUpInside" id="aKV-G5-AId"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="QH2-TJ-1Bo"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="QH2-TJ-1Bo" firstAttribute="trailing" secondItem="hYF-c3-a9g" secondAttribute="trailing" constant="15" id="97b-Ta-Zge"/>
+                            <constraint firstItem="hYF-c3-a9g" firstAttribute="top" secondItem="QH2-TJ-1Bo" secondAttribute="top" constant="10" id="A23-0x-HUV"/>
                             <constraint firstItem="E0e-GY-UFr" firstAttribute="centerY" secondItem="KW1-hc-5yy" secondAttribute="centerY" id="BBb-Eh-hB5"/>
+                            <constraint firstItem="hYF-c3-a9g" firstAttribute="leading" secondItem="QH2-TJ-1Bo" secondAttribute="leading" constant="15" id="Buh-Ct-BXR"/>
                             <constraint firstItem="Vn1-yT-Wxj" firstAttribute="centerX" secondItem="KW1-hc-5yy" secondAttribute="centerX" id="IPL-jc-IeI"/>
                             <constraint firstItem="iuI-lh-4h1" firstAttribute="top" secondItem="KW1-hc-5yy" secondAttribute="top" id="QQJ-we-PoD"/>
                             <constraint firstItem="QH2-TJ-1Bo" firstAttribute="trailing" secondItem="E0e-GY-UFr" secondAttribute="trailing" constant="50" id="Rsn-Ni-bA7"/>
@@ -156,17 +254,39 @@
                     </view>
                     <connections>
                         <outlet property="blockGameView" destination="iuI-lh-4h1" id="upE-Tv-UVk"/>
+                        <outlet property="colMineCountLabel" destination="kf6-Un-QPf" id="rxP-qq-a18"/>
+                        <outlet property="colMineCountTextField" destination="atE-vm-LHf" id="8Ht-sG-LrZ"/>
+                        <outlet property="colRowMineTextFieldStack" destination="070-dX-VpB" id="mcB-Gd-guE"/>
                         <outlet property="endgameView" destination="E0e-GY-UFr" id="eus-ZY-ezW"/>
                         <outlet property="exitButton" destination="ZpO-0n-QQl" id="Tli-Af-Y56"/>
                         <outlet property="flagMineSwitch" destination="Bii-Pb-lqc" id="88O-lt-jfD"/>
+                        <outlet property="mineCountButton" destination="ApD-z1-ZD5" id="hzl-1M-lPA"/>
                         <outlet property="newGameButton" destination="yTk-tL-XTk" id="zbC-OY-C9a"/>
                         <outlet property="questionMineSwitch" destination="uJu-Oo-IzW" id="JrV-dL-Rpc"/>
                         <outlet property="resultLabel" destination="6Cj-4O-mO6" id="r9O-w8-97A"/>
+                        <outlet property="rowCountLabel" destination="4IE-m1-0gS" id="RmT-7r-kmS"/>
+                        <outlet property="rowCountTextField" destination="fR1-9h-D22" id="vYR-mm-OHW"/>
+                        <outlet property="rowCountTextFieldStack" destination="UQE-j1-Tuz" id="ruO-1G-UyT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BYV-ty-naL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="911.59420289855075" y="87.723214285714278"/>
+            <point key="canvasLocation" x="912" y="-120"/>
+        </scene>
+        <!--Tic Tac Toe View Controller-->
+        <scene sceneID="0AT-Xc-wZG">
+            <objects>
+                <viewController modalPresentationStyle="fullScreen" id="8Kg-gM-pRi" customClass="TicTacToeViewController" customModule="GameSuite" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Mwp-1F-4Ib">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="G6d-KM-BR2"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qC5-pa-fiO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="912" y="558"/>
         </scene>
     </scenes>
     <resources>
