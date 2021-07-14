@@ -14,9 +14,16 @@ class TicTacToeViewController: UIViewController {
     let boardView = UIView()
     
     var boardLocations = [[UIButton]]()
-    var chosenLocations = [[String]]()
+    var chosenLocations = [[UILabel]]()
     
     var turnCount = 0
+    
+    enum player {
+        case X
+        case O
+    }
+    
+    var currentPlayer = player.X
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +33,7 @@ class TicTacToeViewController: UIViewController {
     }
     
     func instantiateBoard() {
+        boardView.layer.cornerRadius = 3
         boardView.center = self.view.center
         boardView.backgroundColor = UIColor.blue
         boardView.isHidden = false
@@ -36,6 +44,8 @@ class TicTacToeViewController: UIViewController {
     func instantiateBoardLocations() {
         if (boardLocations.count > 0) {
             boardLocations.removeAll()
+            chosenLocations.removeAll()
+            
             for sViews in boardView.subviews {
                 sViews.removeFromSuperview()
             }
@@ -43,10 +53,23 @@ class TicTacToeViewController: UIViewController {
         
         for y in 0..<3 {
             boardLocations.append([])
+            chosenLocations.append([])
             for x in 0..<3 {
                 boardLocations[y].append(UIButton())
+                chosenLocations[y].append(UILabel())
+                
+                boardLocations[y][x].tag = (y + x)
+                boardLocations[y][x].layer.cornerRadius = 3
+                
+                chosenLocations[y][x].text = ""
+                chosenLocations[y][x].font = UIFont.systemFont(ofSize: 36.0, weight: .bold)
+                chosenLocations[y][x].textAlignment = .center
+                chosenLocations[y][x].textColor = UIColor.black
+                chosenLocations[y][x].isHidden = false
+                
                 
                 boardView.addSubview(boardLocations[y][x])
+                boardLocations[y][x].addSubview(chosenLocations[y][x])
             }
         }
         
@@ -57,44 +80,52 @@ class TicTacToeViewController: UIViewController {
         var squareSizeX = 0
         var squareSizeY = 0
         
-        squareSizeX = (Int(boardView.frame.width) / (boardLocations[0].count))
-        squareSizeY = (Int(boardView.frame.height) / (boardLocations.count))
+        squareSizeX = (Int(boardView.frame.width) / (boardLocations[0].count)) - 3
+        squareSizeY = (Int(boardView.frame.height) / (boardLocations.count)) - 3
         
         for y in 0..<3 {
             for x in 0..<3 {
                 boardLocations[y][x].layer.cornerRadius = 1
                 boardLocations[y][x].tag = ((x + 1) + (y * boardLocations[0].count))
                 boardLocations[y][x].addTarget(self, action: #selector(boardLocationTapped(_:)), for: .touchUpInside)
-
-                var xSpace = ((Double(boardView.frame.width) - (Double(boardLocations[0].count) * Double(squareSizeX))) / (Double(boardLocations[0].count) - 1.0))
-                var ySpace = ((Double(boardView.frame.width) - (Double(boardLocations.count) * Double(squareSizeY))) / (Double(boardLocations.count) - 1.0))
-                var xAlt = 0.0
-                var yAlt = 0.0
-                if (Double(xSpace) > 5.0) {
-                    xAlt = Double(xSpace) - 5.0
-                    squareSizeX -= Int(xAlt)
-                    xSpace = 5
-                }
-                if (Double(ySpace) > 5.0) {
-                    yAlt = Double(ySpace) - 5.0
-                    squareSizeY -= Int(yAlt)
-                    ySpace = 5
-                }
                 
-                let xLoc = (xSpace * (Double(x + 1) - 1.0)) + (Double(squareSizeX) * (Double(x + 1) - 1.0))
-                let yLoc = (ySpace * (Double(y + 1) - 1.0)) + (Double(squareSizeY) * (Double(y + 1) - 1.0))
+                let xLoc = (5.0 * (Double(x + 1) - 1.0)) + (Double(squareSizeX) * (Double(x + 1) - 1.0))
+                let yLoc = (5.0 * (Double(y + 1) - 1.0)) + (Double(squareSizeY) * (Double(y + 1) - 1.0))
                 
                 boardLocations[y][x].frame = CGRect(x: xLoc, y: yLoc, width: Double(squareSizeX), height: Double(squareSizeY))
                 boardLocations[y][x].backgroundColor = UIColor.lightGray
                 
-                squareSizeX += Int(xAlt)
-                squareSizeY += Int(yAlt)
+                chosenLocations[y][x].frame = CGRect(x: 0.0, y: 0.0, width: (chosenLocations[y][x].superview?.frame.width)!, height: (chosenLocations[y][x].superview?.frame.height)!)
             }
         }
     }
     
+    func changeCurrentPlayer(p: player) {
+        if (p == player.X) {
+            self.currentPlayer = player.O
+        } else {
+            self.currentPlayer = player.X
+        }
+    }
+    
     @objc func boardLocationTapped(_ sender:UIButton!) {
+        for y in 0..<3 {
+            for x in 0..<3 {
+                if (boardLocations[y][x].tag == sender.tag && chosenLocations[y][x].text == "") {
+                    print("tapped: \(sender.tag)")
+                    print("tapped: \(boardLocations[y][x].tag)")
+                    print()
+                    if (currentPlayer == player.X) {
+                        chosenLocations[y][x].text = "X"
+                    } else {
+                        chosenLocations[y][x].text = "O"
+                    }
+                }
+            }
+        }
         
+        
+        changeCurrentPlayer(p: currentPlayer)
     }
 
 }
