@@ -24,6 +24,7 @@ class TicTacToeViewController: UIViewController {
     }
     
     var currentPlayer = player.X
+    var gameFinished = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,24 +109,116 @@ class TicTacToeViewController: UIViewController {
         }
     }
     
+    func checkEnd() {
+        if (chosenLocations[0][0].text == chosenLocations[0][1].text && chosenLocations[0][0].text == chosenLocations[0][2].text && chosenLocations[0][0].text != "") {
+            /**
+             X X X
+             = = =
+             = = =
+             */
+            gameFinished = true
+            print("top")
+            print("Player \(currentPlayer) wins")
+        } else if (chosenLocations[1][0].text == chosenLocations[1][1].text && chosenLocations[1][0].text == chosenLocations[1][2].text && chosenLocations[1][0].text != "") {
+            /**
+             = = =
+             X X X
+             = = =
+             */
+            gameFinished = true
+            print("middle row")
+            print("Player \(currentPlayer) wins")
+        } else if (chosenLocations[2][0].text == chosenLocations[2][1].text && chosenLocations[2][0].text == chosenLocations[2][2].text && chosenLocations[2][0].text != "") {
+            /**
+             = = =
+             = = =
+             X X X
+             */
+            gameFinished = true
+            print("bottom")
+            print("Player \(currentPlayer) wins")
+        } else if (chosenLocations[0][0].text == chosenLocations[1][0].text && chosenLocations[0][0].text == chosenLocations[2][0].text && chosenLocations[0][0].text != "") {
+            /**
+             X = =
+             X = =
+             X = =
+             */
+            gameFinished = true
+            print("left")
+            print("Player \(currentPlayer) wins")
+        } else if (chosenLocations[0][1].text == chosenLocations[1][1].text && chosenLocations[0][1].text == chosenLocations[2][1].text && chosenLocations[0][1].text != "") {
+            /**
+             = X =
+             = X =
+             = X =
+             */
+            gameFinished = true
+            print("middle column")
+            print("Player \(currentPlayer) wins")
+        } else if (chosenLocations[0][2].text == chosenLocations[1][2].text && chosenLocations[0][2].text == chosenLocations[2][2].text && chosenLocations[0][2].text != "") {
+            /**
+             = = X
+             = = X
+             = = X
+             */
+            gameFinished = true
+            print("right")
+            print("Player \(currentPlayer) wins")
+        } else if (chosenLocations[0][0].text == chosenLocations[1][1].text && chosenLocations[0][0].text == chosenLocations[2][2].text && chosenLocations[0][0].text != "") {
+            /**
+             X = =
+             = X =
+             = = X
+             */
+            gameFinished = true
+            print("tl -> br")
+            print("Player \(currentPlayer) wins")
+        } else if (chosenLocations[2][0].text == chosenLocations[1][1].text && chosenLocations[2][0].text == chosenLocations[0][2].text && chosenLocations[2][0].text != "") {
+            /**
+             = = X
+             = X =
+             X = =
+             */
+            gameFinished = true
+            print("bl -> tr")
+            print("Player \(currentPlayer) wins")
+        } else {
+            if (turnCount == 9) {
+                print("No Contest")
+            } else {
+                changeCurrentPlayer(p: currentPlayer)
+            }
+            
+//            for y in 0..<3 {
+//                for x in 0..<3 {
+//
+//                }
+//            }
+            
+        }
+    }
+    
     @objc func boardLocationTapped(_ sender:UIButton!) {
-        for y in 0..<3 {
-            for x in 0..<3 {
-                if (boardLocations[y][x].tag == sender.tag && chosenLocations[y][x].text == "") {
-                    print("tapped: \(sender.tag)")
-                    print("tapped: \(boardLocations[y][x].tag)")
-                    print()
-                    if (currentPlayer == player.X) {
-                        chosenLocations[y][x].text = "X"
-                    } else {
-                        chosenLocations[y][x].text = "O"
+        if (!gameFinished) {
+            for y in 0..<3 {
+                for x in 0..<3 {
+                    if (boardLocations[y][x].tag == sender.tag && chosenLocations[y][x].text == "") {
+                        print("tapped: \(sender.tag)")
+                        print("tapped: \(boardLocations[y][x].tag)")
+                        print()
+                        if (currentPlayer == player.X) {
+                            chosenLocations[y][x].text = "X"
+                        } else {
+                            chosenLocations[y][x].text = "O"
+                        }
+                        boardLocations[y][x].isEnabled = false
                     }
                 }
             }
+            turnCount += 1
         }
         
-        
-        changeCurrentPlayer(p: currentPlayer)
+        checkEnd()
     }
 
 }
