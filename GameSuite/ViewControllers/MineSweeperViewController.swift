@@ -129,32 +129,31 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
     }
     
     func stylizeSquares() {
-        var squareSizeX = 0
-        var squareSizeY = 0
+        var squareSizeX = 0.0
+        var squareSizeY = 0.0
         
-        squareSizeX = (Int(v.frame.width) / (squares[0].count))
-        squareSizeY = (Int(v.frame.height) / (squares.count))
+        squareSizeX = (Double(v.frame.width) / Double(squares[0].count + 1))
+        squareSizeY = (Double(v.frame.height) / Double(squares.count + 1))
         
         for y in 1..<squares.count + 1 {
             for x in 1..<squares[0].count + 1 {
                 squares[y - 1][x - 1].layer.cornerRadius = 1
                 squares[y - 1][x - 1].tag = (x + ((y - 1) * squares[0].count))
                 squares[y - 1][x - 1].addTarget(self, action: #selector(minePressed(_:)), for: .touchUpInside)
-
-                var xSpace = ((Double(v.frame.width) - (Double(squares[0].count) * Double(squareSizeX))) / (Double(squares[0].count) - 1.0))
-                var ySpace = ((Double(v.frame.width) - (Double(squares.count) * Double(squareSizeY))) / (Double(squares.count) - 1.0))
-                var xAlt = 0.0
-                var yAlt = 0.0
-                if (Double(xSpace) > 5.0) {
-                    xAlt = Double(xSpace) - 5.0
-                    squareSizeX -= Int(xAlt)
-                    xSpace = 5
+                
+                var xSpace = squareSizeX / Double(xSquareCount)
+                var ySpace = squareSizeY / Double(ySquareCount)
+                if (xSpace > 3.0) {
+                    xSpace = 3.0
                 }
-                if (Double(ySpace) > 5.0) {
-                    yAlt = Double(ySpace) - 5.0
-                    squareSizeY -= Int(yAlt)
-                    ySpace = 5
+                if (ySpace > 3.0) {
+                    ySpace = 3.0
                 }
+                
+                let remainingXSpace = Double(v.frame.width) - (squareSizeX * Double(xSquareCount)) - (xSpace * Double(xSquareCount - 1))
+                let remainingYSpace = Double(v.frame.height) - (squareSizeY * Double(ySquareCount)) - (ySpace * Double(ySquareCount - 1))
+                squareSizeX += remainingXSpace / Double(xSquareCount)
+                squareSizeY += remainingYSpace / Double(ySquareCount)
                 
                 let xLoc = (xSpace * (Double(x) - 1.0)) + (Double(squareSizeX) * (Double(x) - 1.0))
                 let yLoc = (ySpace * (Double(y) - 1.0)) + (Double(squareSizeY) * (Double(y) - 1.0))
@@ -162,8 +161,8 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
                 squares[y - 1][x - 1].frame = CGRect(x: xLoc, y: yLoc, width: Double(squareSizeX), height: Double(squareSizeY))
                 squares[y - 1][x - 1].backgroundColor = UIColor.lightGray
                 
-                squareSizeX += Int(xAlt)
-                squareSizeY += Int(yAlt)
+                squareSizeX -= remainingXSpace / Double(xSquareCount)
+                squareSizeY -= remainingYSpace / Double(ySquareCount)
             }
         }
     }
