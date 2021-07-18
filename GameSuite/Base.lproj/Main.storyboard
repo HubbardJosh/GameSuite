@@ -24,10 +24,10 @@
             </objects>
             <point key="canvasLocation" x="-816" y="88"/>
         </scene>
-        <!--View Controller-->
+        <!--Game Select View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="BYZ-38-t0r" customClass="ViewController" customModule="GameSuite" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="BYZ-38-t0r" customClass="GameSelectViewController" customModule="GameSuite" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -106,6 +106,9 @@
                                                         <rect key="frame" x="39.5" y="51" width="40" height="42"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                         <state key="normal" title="Exit"/>
+                                                        <connections>
+                                                            <action selector="exitPressed:" destination="VKP-Vn-UyS" eventType="touchUpInside" id="3Bq-mv-PP3"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </stackView>
@@ -163,7 +166,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="hYF-c3-a9g">
-                                <rect key="frame" x="15" y="98" width="384" height="30"/>
+                                <rect key="frame" x="15" y="54" width="384" height="30"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="66b-Wz-MLo">
                                         <rect key="frame" x="42.5" y="0.0" width="299" height="30"/>
@@ -266,6 +269,7 @@
                             </mask>
                         </variation>
                     </view>
+                    <navigationItem key="navigationItem" id="gHe-3V-NrP"/>
                     <connections>
                         <outlet property="blockGameView" destination="iuI-lh-4h1" id="upE-Tv-UVk"/>
                         <outlet property="colMineCountLabel" destination="kf6-Un-QPf" id="rxP-qq-a18"/>
@@ -281,6 +285,7 @@
                         <outlet property="rowCountLabel" destination="4IE-m1-0gS" id="RmT-7r-kmS"/>
                         <outlet property="rowCountTextField" destination="fR1-9h-D22" id="vYR-mm-OHW"/>
                         <outlet property="rowCountTextFieldStack" destination="UQE-j1-Tuz" id="ruO-1G-UyT"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="gameSelect" id="Eir-Yw-xrB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BYV-ty-naL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -297,12 +302,16 @@
                         <viewLayoutGuide key="safeArea" id="G6d-KM-BR2"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="SAN-zk-1FM"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qC5-pa-fiO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="912" y="558"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="Eir-Yw-xrB"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

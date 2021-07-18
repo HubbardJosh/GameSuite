@@ -619,6 +619,7 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
         rowCountTextFieldStack.isHidden = true
         colMineCountLabel.text = "Mines:"
         colMineCountTextField.placeholder = "1 - \((xSquareCount * ySquareCount) - 1)"
+        self.colMineCountTextField.becomeFirstResponder()
     }
     
     @IBAction func doneColRowMineCountTapped(_ sender: Any) {
@@ -639,14 +640,15 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
                 
                 setBoardDimensions(cols: newCol!, rows: newRow!)
                 
-                colMineCountTextField.text?.removeAll()
-                rowCountTextField.text?.removeAll()
                 mineCountButton.sendActions(for: .touchUpInside)
             }
         }
+        colMineCountTextField.text?.removeAll()
+        rowCountTextField.text?.removeAll()
+        
+        doneButtonAction()
     }
-    
-    
+        
     func addDoneButtonOnKeyboard() {
         let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
         doneToolbar.barStyle       = UIBarStyle.default
@@ -674,5 +676,9 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
         /* Or:
         self.view.endEditing(true);
         */
+    }
+    
+    @IBAction func exitPressed(_ sender: Any) {
+        performSegue(withIdentifier: "gameSelect", sender: self)
     }
 }
