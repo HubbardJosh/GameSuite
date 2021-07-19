@@ -548,6 +548,7 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
                 }
             }
             neighbors.removeAll()
+            checkEnd()
             
         } else {
             if (questionMineSwitch.isOn) {
@@ -589,7 +590,7 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
             }
         }
 
-        checkEnd()
+//        checkEnd()
     }
     
     @IBAction func questionMineSwitchTapped(_ sender: Any) {
