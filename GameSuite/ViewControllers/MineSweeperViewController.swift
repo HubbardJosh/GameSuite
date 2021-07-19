@@ -168,8 +168,8 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setMineCount(count: Int) {
-        if (count >= (squares.count * squares[0].count)) {
-            mineCount = (squares.count * squares[0].count) - 1
+        if (count >= (xSquareCount * ySquareCount)) {
+            mineCount = (xSquareCount * ySquareCount) - 1
         } else if (count < 1) {
             mineCount = 1
         } else {
