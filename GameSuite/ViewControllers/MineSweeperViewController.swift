@@ -529,6 +529,7 @@ class MineSweeperViewController: UIViewController, UITextFieldDelegate {
                                     exitButton.layer.zPosition = 10
                                     self.view.sendSubviewToBack(v)
                                     resultLabel.text = "YOU LOSE"
+                                    markMines()
                                 }
                             }
                         }
