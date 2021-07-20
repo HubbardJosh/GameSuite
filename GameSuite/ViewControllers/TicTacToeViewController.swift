@@ -12,6 +12,17 @@ class TicTacToeViewController: UIViewController {
     var screenDimensions = UIScreen.main.bounds
     
     let boardView = UIView()
+
+    @IBOutlet weak var labelsView: UIView!
+    
+    @IBOutlet weak var xResultsLabel: UILabel!
+    var xCount = 0
+    
+    @IBOutlet weak var oResultsLabel: UILabel!
+    var oCount = 0
+    
+    @IBOutlet weak var drawResultsLabel: UILabel!
+    var drawCount = 0
     
     var boardLocations = [[UIButton]]()
     var chosenLocations = [[UILabel]]()
@@ -22,15 +33,19 @@ class TicTacToeViewController: UIViewController {
         case X
         case O
     }
+    @IBOutlet weak var currentPlayerLabel: UILabel!
     
     var currentPlayer = player.X
     var gameFinished = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        labelsView.layer.cornerRadius = 5
 
         instantiateBoard()
         instantiateBoardLocations()
+        adjustResultsLabels()
     }
     
     func instantiateBoard() {
@@ -38,18 +53,21 @@ class TicTacToeViewController: UIViewController {
         boardView.center = self.view.center
         boardView.backgroundColor = UIColor.blue
         boardView.isHidden = false
-        boardView.frame = CGRect(x: 10, y: ((screenDimensions.height / 2) - ((screenDimensions.width - 20) / 2)), width: screenDimensions.width - 20, height: screenDimensions.width - 20)
+        boardView.frame = CGRect(x: 10, y: ((screenDimensions.height / 2) - ((screenDimensions.width - 20) / 2)) + 50, width: screenDimensions.width - 20, height: screenDimensions.width - 20)
         self.view.addSubview(boardView)
     }
     
     func instantiateBoardLocations() {
+        gameFinished = false
+        turnCount = 0
+        
         if (boardLocations.count > 0) {
-            boardLocations.removeAll()
-            chosenLocations.removeAll()
-            
             for sViews in boardView.subviews {
                 sViews.removeFromSuperview()
             }
+            
+            boardLocations.removeAll()
+            chosenLocations.removeAll()
         }
         
         for y in 0..<3 {
@@ -61,6 +79,7 @@ class TicTacToeViewController: UIViewController {
                 
                 boardLocations[y][x].tag = (y + x)
                 boardLocations[y][x].layer.cornerRadius = 3
+                boardLocations[y][x].isEnabled = true
                 
                 chosenLocations[y][x].text = ""
                 chosenLocations[y][x].font = UIFont.systemFont(ofSize: 36.0, weight: .bold)
@@ -107,6 +126,25 @@ class TicTacToeViewController: UIViewController {
         } else {
             self.currentPlayer = player.X
         }
+        
+        currentPlayerLabel.text = "\(currentPlayer)'s Turn"
+    }
+    
+    func incrementWin() {
+        if (currentPlayer == player.X) {
+            xCount += 1
+        } else {
+            oCount += 1
+        }
+    }
+    
+    func adjustResultsLabels() {
+        xResultsLabel.text = "X Wins:\t\(xCount)"
+        oResultsLabel.text = "O Wins:\t\(oCount)"
+        drawResultsLabel.text = "Draws:\t\(drawCount)"
+        currentPlayerLabel.text = "\(currentPlayer)'s Turn"
+        
+        instantiateBoardLocations()
     }
     
     func checkEnd() {
@@ -117,6 +155,8 @@ class TicTacToeViewController: UIViewController {
              = = =
              */
             gameFinished = true
+            incrementWin()
+            adjustResultsLabels()
             print("top")
             print("Player \(currentPlayer) wins")
         } else if (chosenLocations[1][0].text == chosenLocations[1][1].text && chosenLocations[1][0].text == chosenLocations[1][2].text && chosenLocations[1][0].text != "") {
@@ -126,6 +166,8 @@ class TicTacToeViewController: UIViewController {
              = = =
              */
             gameFinished = true
+            incrementWin()
+            adjustResultsLabels()
             print("middle row")
             print("Player \(currentPlayer) wins")
         } else if (chosenLocations[2][0].text == chosenLocations[2][1].text && chosenLocations[2][0].text == chosenLocations[2][2].text && chosenLocations[2][0].text != "") {
@@ -135,6 +177,8 @@ class TicTacToeViewController: UIViewController {
              X X X
              */
             gameFinished = true
+            incrementWin()
+            adjustResultsLabels()
             print("bottom")
             print("Player \(currentPlayer) wins")
         } else if (chosenLocations[0][0].text == chosenLocations[1][0].text && chosenLocations[0][0].text == chosenLocations[2][0].text && chosenLocations[0][0].text != "") {
@@ -144,6 +188,8 @@ class TicTacToeViewController: UIViewController {
              X = =
              */
             gameFinished = true
+            incrementWin()
+            adjustResultsLabels()
             print("left")
             print("Player \(currentPlayer) wins")
         } else if (chosenLocations[0][1].text == chosenLocations[1][1].text && chosenLocations[0][1].text == chosenLocations[2][1].text && chosenLocations[0][1].text != "") {
@@ -153,6 +199,8 @@ class TicTacToeViewController: UIViewController {
              = X =
              */
             gameFinished = true
+            incrementWin()
+            adjustResultsLabels()
             print("middle column")
             print("Player \(currentPlayer) wins")
         } else if (chosenLocations[0][2].text == chosenLocations[1][2].text && chosenLocations[0][2].text == chosenLocations[2][2].text && chosenLocations[0][2].text != "") {
@@ -162,6 +210,8 @@ class TicTacToeViewController: UIViewController {
              = = X
              */
             gameFinished = true
+            incrementWin()
+            adjustResultsLabels()
             print("right")
             print("Player \(currentPlayer) wins")
         } else if (chosenLocations[0][0].text == chosenLocations[1][1].text && chosenLocations[0][0].text == chosenLocations[2][2].text && chosenLocations[0][0].text != "") {
@@ -171,6 +221,8 @@ class TicTacToeViewController: UIViewController {
              = = X
              */
             gameFinished = true
+            incrementWin()
+            adjustResultsLabels()
             print("tl -> br")
             print("Player \(currentPlayer) wins")
         } else if (chosenLocations[2][0].text == chosenLocations[1][1].text && chosenLocations[2][0].text == chosenLocations[0][2].text && chosenLocations[2][0].text != "") {
@@ -180,11 +232,15 @@ class TicTacToeViewController: UIViewController {
              X = =
              */
             gameFinished = true
+            incrementWin()
+            adjustResultsLabels()
             print("bl -> tr")
             print("Player \(currentPlayer) wins")
         } else {
             if (turnCount == 9) {
-                print("No Contest")
+                drawCount += 1
+                adjustResultsLabels()
+                print("Draw")
             } else {
                 changeCurrentPlayer(p: currentPlayer)
             }
